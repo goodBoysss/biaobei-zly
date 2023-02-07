@@ -30,7 +30,7 @@ function content_5ef84e7261bc16_33164963 (Smarty_Internal_Template $_smarty_tpl)
     <meta name="keywords" content="">
     <meta name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>小宝短网址</title>
+    <title>短网址</title>
 
     <!-- Set render engine for 360 browser -->
     <meta name="renderer" content="webkit">

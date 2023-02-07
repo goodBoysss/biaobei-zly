@@ -55,7 +55,7 @@ class LoginAction extends BackendAction
             header('Location:/index',301);
             LG::end();
         }
-        $this->smarty->assign('name',"小宝短网址管理后台V1.0");
+        $this->smarty->assign('name',"短网址管理后台V1.0");
         $this->smarty->display('login.htm');
     }
 

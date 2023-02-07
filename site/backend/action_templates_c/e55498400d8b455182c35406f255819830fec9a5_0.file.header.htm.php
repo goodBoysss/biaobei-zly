@@ -25,7 +25,7 @@ function content_5ee0761461fee2_75036009 (Smarty_Internal_Template $_smarty_tpl)
 <html class="x-admin-sm">
 <head>
     <meta charset="UTF-8">
-    <title>欢迎页面-小宝短链管理后台V1.0</title>
+    <title>欢迎页面-短链管理后台V1.0</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
