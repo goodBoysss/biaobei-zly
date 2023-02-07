@@ -1,0 +1,10 @@
+{
+  "autoload":{
+    "psr-4":{
+      "Controllers\\":"action_prog/",
+      "Models\\":"models/",
+      "Comments\\":"comments/",
+      "Utils\\":"utils/"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+<?php
+/**
+ * 系统配置文件-数据读写分离模式
+ * 
+ */
+
+
+
+define("LG_MYSQL_MODE",'multi');
+//mysql数据主库配置文件(Master)
+define("LG_MYSQL_MASTERS",[
+    [
+        'host'=>'127.0.0.1',
+        'username'=>'root',
+        'password'=>'123',
+        'db'=>'lyx_urls',
+        'port'=>'3306',
+        'charset'=>'utf8'
+    ],
+    //...更多主库
+]);
+//mysql数据从配置文件(Slave)
+define("LG_MYSQL_SLAVES",[
+    [
+        'host'=>'127.0.0.1',
+        'username'=>'root',
+        'password'=>'123',
+        'db'=>'lyx_urls',
+        'port'=>'3306',
+        'charset'=>'utf8'
+    ],
+    //...更多从库
+]);
+
+
+
+
+
+//定义Memcache配置
+define('LG_MEMCACHE_HOST', 'localhost');
+define('LG_MEMCACHE_PORT', 11211);
+define('LG_MEMCACHE_EXPIRATION', 0);
+define('LG_MEMCACHE_PREFIX', 'lg');
+define('LG_MEMCACHE_COMPRESSION', FALSE);
+
+
+//定义Redis配置
+define('LG_REDIS_HOST', "127.0.0.1");
+define('LG_REDIS_PORT', 6379);
+define('LG_REDIS_AUTH', null);
+
+//定义MongoDB配置
+define('LG_MONGODB_URI', "mongodb://127.0.0.1:27017");
+define('LG_MONGODB_URIOPTIONS', []);
+define('LG_MONGODB_DRIVEROPTIONS', []);
+define('LG_MONGODB_NAME', 'lg2');
+
+
+//用户中心JAVA的URL
+define('LG_UCENTER_URL', 'http://dev-ucenter.51lick.cn:18880');
+//智慧运营Java接口的URL
+define('LG_ZSERVER_URL', 'http://dev-zserver.51lick.cn:18880');
+

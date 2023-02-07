@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>职员列表-LGFrameWork2.0 by gaorunqiao</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    {literal}
+    <style>
+       /* .tab{width:100%;border:0;margin:0;  border-spacing: 0px;border-collapse:collapse;}
+        .tab tr td,.tab tr th{border:0px solid #ccc; padding:10px;}
+        .tab tr th{background:#ddd;}
+        .tab tr:hover td{background:#f0f0f0;}
+        .tab tr:nth-child(2n+1) td{background:#f0f0f0; opacity: .8;} */
+    </style>
+    {/literal}
+</head>
+<body>
+
+
+<table class="table table-bordered table-hover">
+    <caption>后台职员列表</caption>
+    <tr>
+        <th>用户名</th>
+        <th>真实姓名</th>
+        <th>是否超级用户</th>
+        <th>是否通过</th>
+    </tr>
+    {foreach name=staffLists item=val key=key from=$staffLists}
+    <tr>
+        <td>{$val.username}</td>
+        <td>{$val.truename}</td>
+        <td>{if $val.is_super}是{else}否{/if}</td>
+        <td>{if $val.ifmod}是{else}否{/if}</td>
+    </tr>
+    {/foreach}
+</table>
+
+</body>
+</html>
