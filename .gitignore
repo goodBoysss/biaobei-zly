@@ -1,1 +1,5 @@
 /.idea
+/site/api/conf/conf_const_var
+/backend/api/conf/conf_const_var
+/upload/api/conf/conf_const_var
+/www/api/conf/conf_const_var
