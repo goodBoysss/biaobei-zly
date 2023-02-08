@@ -1,4 +1,5 @@
 <?php
+
 namespace PhpAmqpLib\Connection;
 
 use PhpAmqpLib\Wire\IO\StreamIO;
@@ -13,7 +14,7 @@ class AMQPStreamConnection extends AbstractConnection
      * @param string $vhost
      * @param bool $insist
      * @param string $login_method
-     * @param null $login_response
+     * @param null $login_response @deprecated
      * @param string $locale
      * @param float $connection_timeout
      * @param float $read_write_timeout
@@ -21,6 +22,7 @@ class AMQPStreamConnection extends AbstractConnection
      * @param bool $keepalive
      * @param int $heartbeat
      * @param float $channel_rpc_timeout
+     * @param string|null $ssl_protocol
      */
     public function __construct(
         $host,
@@ -33,10 +35,10 @@ class AMQPStreamConnection extends AbstractConnection
         $login_response = null,
         $locale = 'en_US',
         $connection_timeout = 3.0,
-        $read_write_timeout = 130.0,
+        $read_write_timeout = 3.0,
         $context = null,
         $keepalive = false,
-        $heartbeat = 60,
+        $heartbeat = 0,
         $channel_rpc_timeout = 0.0,
         $ssl_protocol = null
     ) {
@@ -73,11 +75,12 @@ class AMQPStreamConnection extends AbstractConnection
         $this->construct_params = func_get_args();
     }
 
-    protected static function try_create_connection($host, $port, $user, $password, $vhost, $options){
+    protected static function try_create_connection($host, $port, $user, $password, $vhost, $options)
+    {
         $insist = isset($options['insist']) ?
                         $options['insist'] : false;
         $login_method = isset($options['login_method']) ?
-                              $options['login_method'] :'AMQPLAIN';
+                              $options['login_method'] : 'AMQPLAIN';
         $login_response = isset($options['login_response']) ?
                                 $options['login_response'] : null;
         $locale = isset($options['locale']) ?
@@ -92,19 +95,21 @@ class AMQPStreamConnection extends AbstractConnection
                            $options['keepalive'] : false;
         $heartbeat = isset($options['heartbeat']) ?
                            $options['heartbeat'] : 60;
-        return new static($host,
-                          $port,
-                          $user,
-                          $password,
-                          $vhost,
-                          $insist,
-                          $login_method,
-                          $login_response,
-                          $locale,
-                          $connection_timeout,
-                          $read_write_timeout,
-                          $context,
-                          $keepalive,
-                          $heartbeat);
+        return new static(
+            $host,
+            $port,
+            $user,
+            $password,
+            $vhost,
+            $insist,
+            $login_method,
+            $login_response,
+            $locale,
+            $connection_timeout,
+            $read_write_timeout,
+            $context,
+            $keepalive,
+            $heartbeat
+        );
     }
 }

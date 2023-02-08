@@ -1,8 +1,0 @@
-RewriteEngine on
-
-#RewriteCond %{HTTP_HOST} ^eqifa8.com [NC]
-#RewriteRule ^(.*)$ http://www.eqifa8.com/$1 [L,R=301]
-
-RewriteCond %{SCRIPT_FILENAME} !-f
-RewriteCond %{SCRIPT_FILENAME} !-d
-RewriteRule ^(.*)$ index.php/$1

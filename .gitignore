@@ -1,5 +1,12 @@
+/vendor
 /.idea
-/site/api/conf/conf_const_var
-/backend/api/conf/conf_const_var
-/upload/api/conf/conf_const_var
-/www/api/conf/conf_const_var
+Homestead.json
+Homestead.yaml
+.env
+/storage
+/public/doc
+.phpstorm.meta.php
+_ide_helper.php
+.env.dev
+.env.production
+.env.pre

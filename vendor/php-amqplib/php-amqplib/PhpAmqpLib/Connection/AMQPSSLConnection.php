@@ -1,4 +1,5 @@
 <?php
+
 namespace PhpAmqpLib\Connection;
 
 class AMQPSSLConnection extends AMQPStreamConnection
@@ -23,7 +24,7 @@ class AMQPSSLConnection extends AMQPStreamConnection
         $options = array(),
         $ssl_protocol = 'ssl'
     ) {
-        $ssl_context = empty($ssl_options) ? null : $this->create_ssl_context($ssl_options);
+        $ssl_context = empty($ssl_options) ? null : $this->createSslContext($ssl_options);
         parent::__construct(
             $host,
             $port,
@@ -38,13 +39,14 @@ class AMQPSSLConnection extends AMQPStreamConnection
             isset($options['read_write_timeout']) ? $options['read_write_timeout'] : 130,
             $ssl_context,
             isset($options['keepalive']) ? $options['keepalive'] : false,
-            isset($options['heartbeat']) ? $options['heartbeat'] : 60,
+            isset($options['heartbeat']) ? $options['heartbeat'] : 0,
             isset($options['channel_rpc_timeout']) ? $options['channel_rpc_timeout'] : 0.0,
             $ssl_protocol
         );
     }
 
-    public static function try_create_connection($host, $port, $user, $password, $vhost, $options) {
+    public static function try_create_connection($host, $port, $user, $password, $vhost, $options)
+    {
         $ssl_options = isset($options['ssl_options']) ? $options['ssl_options'] : [];
         return new static($host, $port, $user, $password, $vhost, $ssl_options, $options);
     }
@@ -53,7 +55,7 @@ class AMQPSSLConnection extends AMQPStreamConnection
      * @param array $options
      * @return resource
      */
-    private function create_ssl_context($options)
+    private function createSslContext($options)
     {
         $ssl_context = stream_context_create();
         foreach ($options as $k => $v) {

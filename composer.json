@@ -1,42 +1,61 @@
 {
-  "name": "LGFramework2.0",
-  "description": "This is private program.LG2 use MVC develper mode .And use compser install extend packages.",
-  "minimum-stability": "stable",
-  "license": "Copyright by Gaorunqiao(goen88@163.com)",
-  "require" : {
-    "php" : ">=7.0.0",
-    "ext-bcmath" : "*",
-    "ext-mbstring" : "*",
-    "php-amqplib/php-amqplib" : ">=2.6.1",
-    "phpmailer/phpmailer" : "^5.2",
-    "illuminate/redis" : "^5.4",
-    "apache/log4php" : "^2.3",
-    "fguillot/json-rpc": "^1.2",
-    "smarty/smarty": "~3.1",
-    "qiniu/php-sdk": "^7.2",
-    "hashids/hashids": "^4.0",
-    "mongodb/mongodb": "^1.4",
-    "glenscott/url-normalizer": "^1.4",
-    "etechnika/idna-convert": "^1.2"
-  },
-  "require_dev" : {
-    "phpunit/phpunit" : "^4.8",
-    "scrutinizer/ocular" : "^1.1",
-    "squizlabs/php_codesniffer" : "^2.5"
-  },
-  "repositories": {
-    "packagist": {
-      "type": "composer",
-      "url": "https://packagist.phpcomposer.com"
-    }
-  },
-  "config": {
-    "secure-http": false
-  },
-  "autoload":{
-    "psr-4":{
-      "LGCore\\":"core/",
-      "LGCommon\\":"common/"
-    }
-  }
+    "name": "laravel/lumen",
+    "description": "The Laravel Lumen Framework.",
+    "keywords": ["framework", "laravel", "lumen"],
+    "license": "MIT",
+    "type": "project",
+    "require": {
+        "php": ">=7.1.3",
+        "dingo/api": "^2.2",
+        "guzzlehttp/guzzle": "^6.3",
+        "hhxsv5/laravel-s": "~3.7.0",
+        "illuminate/redis": "*",
+        "jacobcyl/ali-oss-storage": "dev-master",
+        "kylekatarnls/laravel-carbon-2": "^1.0.0",
+        "laravel/lumen-framework": "5.7.*",
+        "league/flysystem": "^1.0",
+        "maatwebsite/excel": "3.1.20",
+        "nesbot/carbon": "2.16.3 as 1.34.0",
+        "obs/esdk-obs-php": "^3.21",
+        "predis/predis": "*",
+        "rongcloud/php-sdk": "3.0.12",
+        "sentry/sentry-laravel": "^1.8",
+        "tianmiao/encrypt": "^1.2",
+        "tianmiao/excel": "^2.1",
+        "tymon/jwt-auth": "^1.0",
+        "vladimir-yuldashev/laravel-queue-rabbitmq": "7.5.0",
+        "vlucas/phpdotenv": "~2.2"
+    },
+    "require-dev": {
+        "barryvdh/laravel-ide-helper": "^2.8",
+        "mockery/mockery": "~1.0"
+    },
+    "autoload": {
+        "classmap": [
+            "database/seeds",
+            "database/factories"
+        ],
+        "psr-4": {
+            "App\\": "app/"
+        },
+        "files":[
+            "app/Common/Helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "classmap": [
+        ]
+    },
+    "scripts": {
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ]
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

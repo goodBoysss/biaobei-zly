@@ -1,4 +1,5 @@
 <?php
+
 namespace PhpAmqpLib\Wire\IO;
 
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
@@ -6,10 +7,11 @@ use PhpAmqpLib\Exception\AMQPIOException;
 use PhpAmqpLib\Exception\AMQPSocketException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Helper\MiscHelper;
+use PhpAmqpLib\Helper\SocketConstants;
 
 class SocketIO extends AbstractIO
 {
-    /** @var resource */
+    /** @var null|resource */
     private $sock;
 
     /**
@@ -20,8 +22,14 @@ class SocketIO extends AbstractIO
      * @param int|float|null $write_timeout if null defaults to read timeout
      * @param int $heartbeat how often to send heartbeat. 0 means off
      */
-    public function __construct($host, $port, $read_timeout = 130, $keepalive = false, $write_timeout = null, $heartbeat = 60)
-    {
+    public function __construct(
+        $host,
+        $port,
+        $read_timeout = 3,
+        $keepalive = false,
+        $write_timeout = null,
+        $heartbeat = 0
+    ) {
         $this->host = $host;
         $this->port = $port;
         $this->read_timeout = $read_timeout;
@@ -152,35 +160,39 @@ class SocketIO extends AbstractIO
      */
     public function write($data)
     {
+        // Null sockets are invalid, throw exception
+        if (is_null($this->sock)) {
+            throw new AMQPSocketException(sprintf(
+                'Socket was null! Last SocketError was: %s',
+                socket_strerror(socket_last_error())
+            ));
+        }
+
+        $this->checkBrokerHeartbeat();
+
         $written = 0;
         $len = mb_strlen($data, 'ASCII');
         $write_start = microtime(true);
 
         while ($written < $len) {
-            // Null sockets are invalid, throw exception
-            if (is_null($this->sock)) {
-                throw new AMQPSocketException(sprintf(
-                    'Socket was null! Last SocketError was: %s',
-                    socket_strerror(socket_last_error())
-                ));
-            }
-
             $this->set_error_handler();
             try {
+                $this->select_write();
                 $buffer = mb_substr($data, $written, self::BUFFER_SIZE, 'ASCII');
                 $result = socket_write($this->sock, $buffer, self::BUFFER_SIZE);
                 $this->cleanup_error_handler();
             } catch (\ErrorException $e) {
                 $code = socket_last_error($this->sock);
+                $constants = SocketConstants::getInstance();
                 switch ($code) {
-                    case SOCKET_EPIPE:
-                    case SOCKET_ENETDOWN:
-                    case SOCKET_ENETUNREACH:
-                    case SOCKET_ENETRESET:
-                    case SOCKET_ECONNABORTED:
-                    case SOCKET_ECONNRESET:
-                    case SOCKET_ECONNREFUSED:
-                    case SOCKET_ETIMEDOUT:
+                    case $constants->SOCKET_EPIPE:
+                    case $constants->SOCKET_ENETDOWN:
+                    case $constants->SOCKET_ENETUNREACH:
+                    case $constants->SOCKET_ENETRESET:
+                    case $constants->SOCKET_ECONNABORTED:
+                    case $constants->SOCKET_ECONNRESET:
+                    case $constants->SOCKET_ECONNREFUSED:
+                    case $constants->SOCKET_ETIMEDOUT:
                         $this->close();
                         throw new AMQPConnectionClosedException(socket_strerror($code), $code, $e);
                     default:
@@ -206,7 +218,6 @@ class SocketIO extends AbstractIO
                 if (($now - $write_start) > $this->write_timeout) {
                     throw AMQPTimeoutException::writeTimeout($this->write_timeout);
                 }
-                $this->select_write();
             }
         }
     }
@@ -221,8 +232,8 @@ class SocketIO extends AbstractIO
             socket_close($this->sock);
         }
         $this->sock = null;
-        $this->last_read = null;
-        $this->last_write = null;
+        $this->last_read = 0;
+        $this->last_write = 0;
     }
 
     /**
@@ -265,8 +276,9 @@ class SocketIO extends AbstractIO
      */
     public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
     {
+        $constants = SocketConstants::getInstance();
         // socket_select warning that it has been interrupted by a signal - EINTR
-        if (false !== strrpos($errstr, socket_strerror(SOCKET_EINTR))) {
+        if (isset($constants->SOCKET_EINTR) && false !== strrpos($errstr, socket_strerror($constants->SOCKET_EINTR))) {
             // it's allowed while processing signals
             return;
         }
