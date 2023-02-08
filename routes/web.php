@@ -12,7 +12,7 @@
 */
 $router->get('/', function () use ($router) {
     //    return $router->app->version();
-    return "xx系统";
+    return "短链接服务";
 });
 
 
