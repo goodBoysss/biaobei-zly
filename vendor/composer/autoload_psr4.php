@@ -14,6 +14,7 @@ return array(
     'Tymon\\JWTAuth\\' => array($vendorDir . '/tymon/jwt-auth/src'),
     'Tianmiao\\Excel\\' => array($vendorDir . '/tianmiao/excel/src'),
     'Tianmiao\\Encrypt\\' => array($vendorDir . '/tianmiao/encrypt/src'),
+    'Tianmiao\\Cloud\\' => array($vendorDir . '/tianmiao/cloud/src'),
     'Symfony\\Polyfill\\Uuid\\' => array($vendorDir . '/symfony/polyfill-uuid'),
     'Symfony\\Polyfill\\Php80\\' => array($vendorDir . '/symfony/polyfill-php80'),
     'Symfony\\Polyfill\\Php73\\' => array($vendorDir . '/symfony/polyfill-php73'),

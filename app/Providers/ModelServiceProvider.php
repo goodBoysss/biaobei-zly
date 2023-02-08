@@ -2,47 +2,46 @@
 
 namespace App\Providers;
 
-use App\Models\Admin;
-use App\Models\AdminActionLog;
-use App\Models\AdminLoginLog;
 use App\Models\App;
-use App\Models\AppDataLog;
-use App\Models\AppUser;
-use App\Models\AppUserGiveGift;
-use App\Models\AppUserLogin;
-use App\Models\AppUserLoginSum;
-use App\Models\AppUserRecharge;
-use App\Models\AppUserRechargeSum;
-use App\Models\AppUserRegister;
-use App\Models\Channel;
-use App\Models\ChannelDayStatistic;
-use App\Models\ChannelDaySumStatistic;
-use App\Models\ChannelLog;
-use App\Models\ChannelParentsChangeLog;
-use App\Models\ChannelUserActionLog;
-use App\Models\ChannelMaterialRel;
-use App\Models\ChannelUserLoginLog;
-use App\Models\ExportDownloadLog;
-use App\Models\ExportRecord;
-use App\Models\File;
-use App\Models\InvitationImageCode;
-use App\Models\InvitationRegisterRecord;
-use App\Models\InvitationRegisterSmsLog;
-use App\Models\InvitationVisitLog;
-use App\Models\Material;
-use App\Models\MaterialImage;
+use App\Models\Domain;
+use App\Models\DomainRecentKey;
+use App\Models\RedirectUrl;
 use Illuminate\Support\ServiceProvider;
 
 class ModelServiceProvider extends ServiceProvider
 {
     public function register()
     {
+        //应用
+        $this->app();
 
+        //域名
+        $this->domain();
+
+        //重定向跳转
+        $this->redirect();
     }
 
     //应用
     private function app()
     {
+        //应用
+        $this->app->singleton('model_app', App::class);
+    }
 
+    //域名
+    private function domain()
+    {
+        //域名
+        $this->app->singleton('model_domain', Domain::class);
+        //域名最近的一个key
+        $this->app->singleton('model_domain_recent_key', DomainRecentKey::class);
+    }
+
+    //重定向跳转
+    private function redirect()
+    {
+        //重定向url
+        $this->app->singleton('model_redirect_url', RedirectUrl::class);
     }
 }

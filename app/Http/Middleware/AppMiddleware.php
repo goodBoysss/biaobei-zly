@@ -45,7 +45,6 @@ class AppMiddleware
             $appSecret = $appInfo['app_secret'];
         }
 
-
         if (env("APP_ENV") != "production") {
             return $next($request);
         }

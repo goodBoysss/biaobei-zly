@@ -59,6 +59,7 @@ class ComposerStaticInit78471daf270ed115ebc10c9ac58cfdf7
             'Tymon\\JWTAuth\\' => 14,
             'Tianmiao\\Excel\\' => 15,
             'Tianmiao\\Encrypt\\' => 17,
+            'Tianmiao\\Cloud\\' => 15,
         ),
         'S' => 
         array (
@@ -269,6 +270,10 @@ class ComposerStaticInit78471daf270ed115ebc10c9ac58cfdf7
         'Tianmiao\\Encrypt\\' => 
         array (
             0 => __DIR__ . '/..' . '/tianmiao/encrypt/src',
+        ),
+        'Tianmiao\\Cloud\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/tianmiao/cloud/src',
         ),
         'Symfony\\Polyfill\\Uuid\\' => 
         array (
@@ -795,17 +800,17 @@ class ComposerStaticInit78471daf270ed115ebc10c9ac58cfdf7
 
     public static $classMap = array (
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
+        'App\\Enums\\ContextEnum' => __DIR__ . '/../..' . '/app/Enums/ContextEnum.php',
         'App\\Enums\\RedisKeyEnum' => __DIR__ . '/../..' . '/app/Enums/RedisKeyEnum.php',
         'App\\Events\\Event' => __DIR__ . '/../..' . '/app/Events/Event.php',
         'App\\Events\\ExampleEvent' => __DIR__ . '/../..' . '/app/Events/ExampleEvent.php',
         'App\\Exceptions\\BasicException' => __DIR__ . '/../..' . '/app/Exceptions/BasicException.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
+        'App\\Http\\Controllers\\Api\\UrlController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/UrlController.php',
         'App\\Http\\Controllers\\BaseController' => __DIR__ . '/../..' . '/app/Http/Controllers/BaseController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
-        'App\\Http\\Middleware\\AdminLogMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/AdminLogMiddleware.php',
-        'App\\Http\\Middleware\\AdminMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/AdminMiddleware.php',
-        'App\\Http\\Middleware\\ApiMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/ApiMiddleware.php',
         'App\\Http\\Middleware\\AppMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/AppMiddleware.php',
+        'App\\Http\\Middleware\\CorsMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/CorsMiddleware.php',
         'App\\Jobs\\Job' => __DIR__ . '/../..' . '/app/Jobs/Job.php',
         'App\\Listeners\\ExampleListener' => __DIR__ . '/../..' . '/app/Listeners/ExampleListener.php',
         'App\\Listeners\\QueryListener' => __DIR__ . '/../..' . '/app/Listeners/QueryListener.php',
@@ -820,6 +825,7 @@ class ComposerStaticInit78471daf270ed115ebc10c9ac58cfdf7
         'App\\Request\\Validator' => __DIR__ . '/../..' . '/app/Request/Validator.php',
         'App\\Response\\Response' => __DIR__ . '/../..' . '/app/Response/Response.php',
         'App\\Response\\TestTransFrom' => __DIR__ . '/../..' . '/app/Response/TestTransFrom.php',
+        'App\\Services\\Tools\\AppService' => __DIR__ . '/../..' . '/app/Services/Tools/AppService.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Barryvdh\\LaravelIdeHelper\\Alias' => __DIR__ . '/..' . '/barryvdh/laravel-ide-helper/src/Alias.php',
         'Barryvdh\\LaravelIdeHelper\\Console\\EloquentCommand' => __DIR__ . '/..' . '/barryvdh/laravel-ide-helper/src/Console/EloquentCommand.php',
@@ -5394,6 +5400,27 @@ class ComposerStaticInit78471daf270ed115ebc10c9ac58cfdf7
         'Symfony\\Polyfill\\Php73\\Php73' => __DIR__ . '/..' . '/symfony/polyfill-php73/Php73.php',
         'Symfony\\Polyfill\\Php80\\Php80' => __DIR__ . '/..' . '/symfony/polyfill-php80/Php80.php',
         'Symfony\\Polyfill\\Uuid\\Uuid' => __DIR__ . '/..' . '/symfony/polyfill-uuid/Uuid.php',
+        'Tianmiao\\Cloud\\App\\Channel\\ChannelClient' => __DIR__ . '/..' . '/tianmiao/cloud/src/App/Channel/ChannelClient.php',
+        'Tianmiao\\Cloud\\App\\Channel\\General\\ChannelGeneralClient' => __DIR__ . '/..' . '/tianmiao/cloud/src/App/Channel/General/ChannelGeneralClient.php',
+        'Tianmiao\\Cloud\\App\\Financial\\FinancialClient' => __DIR__ . '/..' . '/tianmiao/cloud/src/App/Financial/FinancialClient.php',
+        'Tianmiao\\Cloud\\App\\Financial\\Payment\\FinancialUnionpayClient' => __DIR__ . '/..' . '/tianmiao/cloud/src/App/Financial/Payment/FinancialUnionpayClient.php',
+        'Tianmiao\\Cloud\\App\\Financial\\Verify\\FinancialVerifyClient' => __DIR__ . '/..' . '/tianmiao/cloud/src/App/Financial/Verify/FinancialVerifyClient.php',
+        'Tianmiao\\Cloud\\App\\Package\\General\\PackageGeneralClient' => __DIR__ . '/..' . '/tianmiao/cloud/src/App/Package/General/PackageGeneralClient.php',
+        'Tianmiao\\Cloud\\App\\Package\\PackageClient' => __DIR__ . '/..' . '/tianmiao/cloud/src/App/Package/PackageClient.php',
+        'Tianmiao\\Cloud\\App\\Promotion\\General\\PromotionGeneralClient' => __DIR__ . '/..' . '/tianmiao/cloud/src/App/Promotion/General/PromotionGeneralClient.php',
+        'Tianmiao\\Cloud\\App\\Promotion\\PromotionClient' => __DIR__ . '/..' . '/tianmiao/cloud/src/App/Promotion/PromotionClient.php',
+        'Tianmiao\\Cloud\\App\\Security\\Check\\SecurityCheckClient' => __DIR__ . '/..' . '/tianmiao/cloud/src/App/Security/Check/SecurityCheckClient.php',
+        'Tianmiao\\Cloud\\App\\Security\\SecurityClient' => __DIR__ . '/..' . '/tianmiao/cloud/src/App/Security/SecurityClient.php',
+        'Tianmiao\\Cloud\\App\\Tripartite\\Music\\MusicClient' => __DIR__ . '/..' . '/tianmiao/cloud/src/App/Tripartite/Music/MusicClient.php',
+        'Tianmiao\\Cloud\\App\\Tripartite\\Sms\\SmsClient' => __DIR__ . '/..' . '/tianmiao/cloud/src/App/Tripartite/Sms/SmsClient.php',
+        'Tianmiao\\Cloud\\App\\Tripartite\\TripartiteClient' => __DIR__ . '/..' . '/tianmiao/cloud/src/App/Tripartite/TripartiteClient.php',
+        'Tianmiao\\Cloud\\Client' => __DIR__ . '/..' . '/tianmiao/cloud/src/Client.php',
+        'Tianmiao\\Cloud\\Libs\\LaravelS\\Cleaners\\ContextCleaner' => __DIR__ . '/..' . '/tianmiao/cloud/src/Libs/LaravelS/Cleaners/ContextCleaner.php',
+        'Tianmiao\\Cloud\\Libs\\LaravelS\\Cleaners\\LogicCleaner' => __DIR__ . '/..' . '/tianmiao/cloud/src/Libs/LaravelS/Cleaners/LogicCleaner.php',
+        'Tianmiao\\Cloud\\Libs\\LaravelS\\Context' => __DIR__ . '/..' . '/tianmiao/cloud/src/Libs/LaravelS/Context.php',
+        'Tianmiao\\Cloud\\Service\\TMRobotService' => __DIR__ . '/..' . '/tianmiao/cloud/src/Service/TMRobotService.php',
+        'Tianmiao\\Cloud\\Utils\\HttpRequest' => __DIR__ . '/..' . '/tianmiao/cloud/src/Utils/HttpRequest.php',
+        'Tianmiao\\Cloud\\Utils\\TianmiaoCloudException' => __DIR__ . '/..' . '/tianmiao/cloud/src/Utils/TianmiaoCloudException.php',
         'Tianmiao\\Encrypt\\DES3' => __DIR__ . '/..' . '/tianmiao/encrypt/src/DES3.php',
         'Tianmiao\\Excel\\CsvExport' => __DIR__ . '/..' . '/tianmiao/excel/src/CsvExport.php',
         'Tianmiao\\Excel\\CsvReader' => __DIR__ . '/..' . '/tianmiao/excel/src/CsvReader.php',

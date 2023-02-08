@@ -2,40 +2,46 @@
 
 namespace App\Providers;
 
-use App\Repositories\AdminActionLogRepository;
-use App\Repositories\AdminLoginLogRepository;
-use App\Repositories\AdminRepository;
-use App\Repositories\AppDataLogRepository;
 use App\Repositories\AppRepository;
-use App\Repositories\AppUserGiveGiftRepository;
-use App\Repositories\AppUserLoginRepository;
-use App\Repositories\AppUserLoginSumRepository;
-use App\Repositories\AppUserRechargeRepository;
-use App\Repositories\AppUserRechargeSumRepository;
-use App\Repositories\AppUserRegisterRepository;
-use App\Repositories\AppUserRepository;
-use App\Repositories\ChannelDaySumStatisticRepository;
-use App\Repositories\ChannelLogRepository;
-use App\Repositories\ChannelMaterialRelRepository;
-use App\Repositories\ChannelParentsChangeLogRepository;
-use App\Repositories\ChannelRepository;
-use App\Repositories\ChannelDayStatisticRepository;
-use App\Repositories\ChannelUserActionLogRepository;
-use App\Repositories\ChannelUserLoginLogRepository;
-use App\Repositories\ExportDownloadLogRepository;
-use App\Repositories\ExportRecordRepository;
-use App\Repositories\InvitationImageCodeRepository;
-use App\Repositories\InvitationRegisterRecordRepository;
-use App\Repositories\InvitationRegisterSmsLogRepository;
-use App\Repositories\InvitationVisitLogRepository;
-use App\Repositories\MaterialImageRepository;
-use App\Repositories\MaterialRepository;
+use App\Repositories\DomainRecentKeyRepository;
+use App\Repositories\DomainRepository;
+use App\Repositories\RedirectUrlRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
     public function register()
     {
+        // 应用
+        $this->app();
 
+        // 域名
+        $this->domain();
+
+        //重定向跳转
+        $this->redirect();
+    }
+
+    // 应用
+    private function app()
+    {
+        // 应用
+        $this->app->singleton('repo_app', AppRepository::class);
+    }
+
+    // 域名
+    private function domain()
+    {
+        // 域名
+        $this->app->singleton('repo_domain', DomainRepository::class);
+        // 域名最近的一个key
+        $this->app->singleton('repo_domain_recent_key', DomainRecentKeyRepository::class);
+    }
+
+    //重定向跳转
+    private function redirect()
+    {
+        //重定向url
+        $this->app->singleton('repo_redirect_url', RedirectUrlRepository::class);
     }
 }

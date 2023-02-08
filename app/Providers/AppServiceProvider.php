@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Request;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
+use Tianmiao\Cloud\Libs\LaravelS\Context;
 
 //引用http请求类
 
@@ -27,5 +28,8 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment() !== 'production') {
             $this->app->register(IdeHelperServiceProvider::class);
         }
+
+        //全局数据
+        $this->app->singleton('context',Context::class);
     }
 }

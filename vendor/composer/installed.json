@@ -10360,6 +10360,43 @@
             "install-path": "../symfony/var-dumper"
         },
         {
+            "name": "tianmiao/cloud",
+            "version": "v1.2.10",
+            "version_normalized": "1.2.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/goodBoysss/tianmiao-cloud.git",
+                "reference": "f5c3cd3e78c8a2d1d5ec50c85e006f3266de22bf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/goodBoysss/tianmiao-cloud/zipball/f5c3cd3e78c8a2d1d5ec50c85e006f3266de22bf",
+                "reference": "f5c3cd3e78c8a2d1d5ec50c85e006f3266de22bf",
+                "shasum": ""
+            },
+            "time": "2023-02-03T06:01:29+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Tianmiao\\Cloud\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "zhanglx",
+                    "email": "zhanglx92@163.com"
+                }
+            ],
+            "description": "天渺公共服务",
+            "support": {
+                "issues": "https://github.com/goodBoysss/tianmiao-cloud/issues",
+                "source": "https://github.com/goodBoysss/tianmiao-cloud/tree/v1.2.10"
+            },
+            "install-path": "../tianmiao/cloud"
+        },
+        {
             "name": "tianmiao/encrypt",
             "version": "v1.2",
             "version_normalized": "1.2.0.0",
