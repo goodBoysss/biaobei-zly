@@ -40,10 +40,11 @@ class RedirectController extends BaseController
         if (!empty($redirectUrl)) {
             //添加访问记录到redis缓存
             app("logic_redirect")->addRedirectVisitRecordToCache(array(
-                'domain'=>$domain,
-                'short_key'=>$shortKey,
-                'user_agent'=>$request->userAgent(),
-                'ip'=>$request->ip(),
+                'domain' => $domain,
+                'short_key' => $shortKey,
+                'user_agent' => $request->userAgent(),
+                'ip' => $request->ip(),
+                'visit_time' => date("Y-m-d H:i:s"),
             ));
 
             return redirect($redirectUrl);
