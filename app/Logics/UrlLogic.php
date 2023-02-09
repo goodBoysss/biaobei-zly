@@ -16,6 +16,7 @@
 namespace App\Logics;
 
 use App\Common\ShortKey;
+use App\Enums\RedisKeyEnum;
 use App\Exceptions\BasicException;
 use Illuminate\Support\Facades\DB;
 
@@ -46,6 +47,13 @@ class UrlLogic
         //域名md5
         $domainMd5 = $domainInfo['domain_md5'];
 
+        //对生成短链的域名加锁
+        $clockKey = sprintf(RedisKeyEnum::SHORTEN_URL, $domainMd5);
+        $clockResult = app('redis')->set($clockKey, 1, 'ex', 30, 'nx');
+        if (!$clockResult) {
+            throw new BasicException(10008, '域名生成失败，请稍后再试');
+        }
+
         //获取上一个短连接key（不存在则生成）
         $recentKeyInfo = $this->getRecentKeyInfo($domainMd5);
 
@@ -59,6 +67,9 @@ class UrlLogic
         $shortKey = $shortKeyObj->next($recentShortKey);
         //短连接地址
         $shortUrl = "{$domain}/{$shortKey}";
+
+        //删除锁
+        app('redis')->del($clockKey);
 
         //更新域名最近一个短链key
         app("repo_domain_recent_key")->update($recentKeyId, array(
@@ -125,7 +136,7 @@ class UrlLogic
         }
 
         if (empty($domainInfo)) {
-            throw new BasicException(10008, '域名不存在');
+            throw new BasicException(10008, '不存在域名');
         }
 
         if ($domainInfo['is_published'] == 0) {

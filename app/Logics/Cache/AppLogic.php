@@ -150,4 +150,21 @@ class AppLogic
         return $appInfo;
     }
 
+    /**
+     * @desc: 通过alias获取应用ID
+     * @param string $alias
+     * @return int
+     * User: zhanglinxiao<zhanglinxiao@tianmtech.cn>
+     * DateTime: 2023/01/11 18:18
+     */
+    public function getAppIdByAlias($alias)
+    {
+        $appId = 0;
+        $appInfo = $this->getAppByAlias($alias);
+        if (!empty($appInfo)) {
+            $appId = $appInfo['id'];
+        }
+        return $appId;
+    }
+
 }

@@ -38,9 +38,17 @@ class UrlController extends BaseController
         $params = $this->validate($request, array(
             "url" => 'required|url',
             "domain" => 'string',
+            "app_alias" => 'string',
         ));
 
         $appId = app("context")->get(ContextEnum::APP_ID, 0);
+
+        //公共服务间调用用到
+        if (empty($appId) && !empty($params['app_alias'])) {
+            $appId = app("logic_cache_app")->getAppIdByAlias($params['app_alias']);
+        }
+
+
         $result = app("logic_url")->shortenUrl($appId, $params);
         return Response::sendData($result);
     }
