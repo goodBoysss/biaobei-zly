@@ -16,6 +16,7 @@
 namespace App\Logics;
 
 use App\Common\ShortKey;
+use App\Enums\RedisKeyEnum;
 use App\Exceptions\BasicException;
 use Illuminate\Support\Facades\DB;
 
@@ -34,6 +35,13 @@ class RedirectLogic
     {
         $domainMd5 = md5($domain);
 
+        //先从缓存获取
+        $clockKey = sprintf(RedisKeyEnum::REDIRECT_URLS, $domainMd5, $shortKey);
+        $originUrl = app("redis")->get($clockKey);
+        if (!empty($originUrl)) {
+            return $originUrl;
+        }
+
         $redirectUrlInfo = app("repo_redirect_url")->first(array(
             'domain_md5' => $domainMd5,
             'short_key' => $shortKey,
@@ -46,6 +54,17 @@ class RedirectLogic
         }
 
         return $originUrl;
+    }
+
+    /**
+     * @desc: 添加访问记录到redis缓存
+     * @param $params
+     * User: zhanglinxiao<zhanglinxiao@tianmtech.cn>
+     * DateTime: 2023/02/09 16:36
+     */
+    public function addRedirectVisitRecordToCache($params)
+    {
+        app("redis")->lpush(RedisKeyEnum::REDIRECT_VISIT_RECORD, json_encode($params));
     }
 
 

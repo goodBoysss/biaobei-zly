@@ -36,7 +36,16 @@ class RedirectController extends BaseController
     {
         $domain = $request->getHttpHost();
         $redirectUrl = app("logic_redirect")->getRedirectUrl($domain, $shortKey);
+
         if (!empty($redirectUrl)) {
+            //添加访问记录到redis缓存
+            app("logic_redirect")->addRedirectVisitRecordToCache(array(
+                'domain'=>$domain,
+                'short_key'=>$shortKey,
+                'user_agent'=>$request->userAgent(),
+                'ip'=>$request->ip(),
+            ));
+
             return redirect($redirectUrl);
         } else {
             return Response::sendData(array(), '地址不存在或链接已失效');
