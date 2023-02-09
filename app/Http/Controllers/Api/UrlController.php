@@ -48,7 +48,6 @@ class UrlController extends BaseController
             $appId = app("logic_cache_app")->getAppIdByAlias($params['app_alias']);
         }
 
-
         $result = app("logic_url")->shortenUrl($appId, $params);
         return Response::sendData($result);
     }
