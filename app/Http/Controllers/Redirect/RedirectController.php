@@ -49,10 +49,10 @@ class RedirectController extends BaseController
 
 
         //获取跳转页面封面html
-        $coverHtml = app("logic_redirect")->getCoverHtml($redirectInfo);
-        return (new \Symfony\Component\HttpFoundation\Response($coverHtml, 200,array(
-            'Content-Type'=>'text/html'
-        )));
+//        $coverHtml = app("logic_redirect")->getCoverHtml($redirectInfo);
+//        return (new \Symfony\Component\HttpFoundation\Response($coverHtml, 200,array(
+//            'Content-Type'=>'text/html'
+//        )));
 
         if (!empty($redirectInfo)) {
             //获取浏览器类型：0-其他；1-微信应用内置浏览器；2-QQ应用内置浏览器
