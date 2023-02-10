@@ -35,19 +35,22 @@ class RedirectController extends BaseController
     public function redirectUrl(Request $request, $shortKey)
     {
         $domain = $request->getHttpHost();
-        $redirectUrl = app("logic_redirect")->getRedirectUrl($domain, $shortKey);
+        $userAgent = $request->userAgent();
+        $redirectInfo = app("logic_redirect")->getRedirectInfo($domain, $shortKey);
 
-        if (!empty($redirectUrl)) {
-            //添加访问记录到redis缓存
-            app("logic_redirect")->addRedirectVisitRecordToCache(array(
-                'domain' => $domain,
-                'short_key' => $shortKey,
-                'user_agent' => $request->userAgent(),
-                'ip' => $request->ip(),
-                'visit_time' => date("Y-m-d H:i:s"),
-            ));
+        //添加访问记录到redis缓存
+        app("logic_redirect")->addRedirectVisitRecordToCache(array(
+            'domain' => $domain,
+            'short_key' => $shortKey,
+            'user_agent' => $userAgent,
+            'ip' => $request->ip(),
+            'visit_time' => date("Y-m-d H:i:s"),
+        ));
 
-            return redirect($redirectUrl);
+        if (!empty($redirectInfo)) {
+            var_dump($redirectInfo);
+            die();
+//            return redirect($redirectInfo);
         } else {
             return Response::sendData(array(), '地址不存在或链接已失效');
         }

@@ -31,27 +31,31 @@ class RedirectLogic
      * User: zhanglinxiao<zhanglinxiao@tianmtech.cn>
      * DateTime: 2023/02/08 21:20
      */
-    public function getRedirectUrl($domain, $shortKey)
+    public function getRedirectInfo($domain, $shortKey)
     {
         $domainMd5 = md5($domain);
 
         //先从缓存获取
         $clockKey = sprintf(RedisKeyEnum::REDIRECT_URLS, $domainMd5, $shortKey);
-        $originUrl = app("redis")->get($clockKey);
-        if (!empty($originUrl)) {
-            return $originUrl;
-        }
-
-        $redirectUrlInfo = app("repo_redirect_url")->first(array(
-            'domain_md5' => $domainMd5,
-            'short_key' => $shortKey,
-        ), array('origin_url'));
-
-        if (!empty($redirectUrlInfo['origin_url'])) {
-            $originUrl = $redirectUrlInfo['origin_url'];
+        $redirectInfo = app("redis")->get($clockKey);
+        if (!empty($redirectInfo)) {
+            //存在缓存中
+            $redirectInfo = json_decode($redirectInfo, true);
         } else {
-            $originUrl = "";
+            $redirectUrlInfo = app("repo_redirect_url")->first(array(
+                'domain_md5' => $domainMd5,
+                'short_key' => $shortKey,
+            ), array('origin_url'), array(
+                'id' => 'desc'
+            ));
+
+            if (!empty($redirectUrlInfo['origin_url'])) {
+                $originUrl = $redirectUrlInfo['origin_url'];
+            } else {
+                $originUrl = "";
+            }
         }
+
 
         return $originUrl;
     }
