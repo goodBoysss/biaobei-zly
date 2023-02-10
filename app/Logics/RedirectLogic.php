@@ -103,7 +103,13 @@ class RedirectLogic
     public function getCoverHtml($redirectInfo)
     {
         $redirectInfo['cover_url'] = "https://img04.sogoucdn.com/v2/thumb/retype_exclude_gif/ext/auto/q/80/crop/xy/ai/t/0/w/562/h/752?appid=122&url=https://img01.sogoucdn.com/app/a/100520020/774210cf558ba3ccfba38873ea713d33";
-        $coverHtml = "<html><body><img src='{$redirectInfo['cover_url']}' href='{$redirectInfo['origin_url']}' width='100%' /></body><html>";
+        $coverHtml = "
+            <html>
+                <body style='margin: 0;position: relative;'>
+                    <img style='position: fixed ; top: 0;' src='https://channel-prod.obs.cn-east-3.myhuaweicloud.com:443/open_by_browser.JPG?AccessKeyId=U6QEPWLSFURLXGYZKW9L&Expires=1707127797&Signature=s0Sbyykh6gA8GQ6ftx%2BfM0Bk2sE%3D' href='{$redirectInfo['origin_url']}' width='100%' />
+                    <img style='margin-top:17.5vw' src='{$redirectInfo['cover_url']}' href='{$redirectInfo['origin_url']}' width='100%' />
+                </body>
+            <html>";
         return $coverHtml;
     }
 
