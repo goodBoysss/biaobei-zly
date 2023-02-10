@@ -48,9 +48,18 @@ class RedirectController extends BaseController
         ));
 
         if (!empty($redirectInfo)) {
-            var_dump($redirectInfo);
-            die();
-//            return redirect($redirectInfo);
+            //获取浏览器类型：0-其他；1-微信应用内置浏览器；2-QQ应用内置浏览器
+            $browserType = app("logic_redirect")->getBrowserType($userAgent);
+            if ($browserType == 0) {
+                return redirect($redirectInfo['origin_url']);
+            } else {
+                //获取跳转页面封面html
+                $coverHtml = app("logic_redirect")->getCoverHtml($redirectInfo);
+                return (new \Symfony\Component\HttpFoundation\Response($coverHtml, 200,array(
+                    'Content-Type'=>'text/html'
+                )));
+            }
+
         } else {
             return Response::sendData(array(), '地址不存在或链接已失效');
         }

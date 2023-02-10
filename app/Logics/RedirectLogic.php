@@ -45,19 +45,21 @@ class RedirectLogic
             $redirectUrlInfo = app("repo_redirect_url")->first(array(
                 'domain_md5' => $domainMd5,
                 'short_key' => $shortKey,
-            ), array('origin_url'), array(
+            ), array('origin_url', 'is_show_cover'), array(
                 'id' => 'desc'
             ));
 
-            if (!empty($redirectUrlInfo['origin_url'])) {
-                $originUrl = $redirectUrlInfo['origin_url'];
-            } else {
-                $originUrl = "";
-            }
+            //todo::
+            $redirectInfo = array(
+                'origin_url' => $redirectUrlInfo['origin_url'],
+                'is_show_cover' => $redirectUrlInfo['is_show_cover'],
+                'cover_url' => "https://pics7.baidu.com/feed/18d8bc3eb13533fa43998137bd0d4f1440345be1.jpeg@f_auto?token=05942c87493edc76c28e299ce4dbe69e",
+            );
+
         }
 
 
-        return $originUrl;
+        return $redirectInfo;
     }
 
     /**
@@ -69,6 +71,40 @@ class RedirectLogic
     public function addRedirectVisitRecordToCache($params)
     {
         app("redis")->lpush(RedisKeyEnum::REDIRECT_VISIT_RECORD, json_encode($params));
+    }
+
+
+    /**
+     * @desc: 获取浏览器类型：0-其他；1-微信应用内置；2-QQ应用内置
+     * @return int
+     * User: zhanglinxiao<zhanglinxiao@tianmtech.cn>
+     * DateTime: 2023/02/10 15:54
+     */
+    public function getBrowserType($userAgent): int
+    {
+        $browserType = 0;
+
+        if (strpos($userAgent, 'MicroMessenger') !== false) {
+            $browserType = 1;
+        } else if (strpos($userAgent, 'MQQBrowser') !== false) {
+            $browserType = 2;
+        }
+
+        return $browserType;
+    }
+
+    /**
+     * @desc: 方法描述
+     * @param $userAgent
+     * @return string
+     * User: zhanglinxiao<zhanglinxiao@tianmtech.cn>
+     * DateTime: 2023/02/10 16:25
+     */
+    public function getCoverHtml($redirectInfo)
+    {
+        $redirectInfo['cover_url'] = "https://img04.sogoucdn.com/v2/thumb/retype_exclude_gif/ext/auto/q/80/crop/xy/ai/t/0/w/562/h/752?appid=122&url=https://img01.sogoucdn.com/app/a/100520020/774210cf558ba3ccfba38873ea713d33";
+        $coverHtml = "<html><body><img src='{$redirectInfo['cover_url']}' width='100%' /></body><html>";
+        return $coverHtml;
     }
 
 
