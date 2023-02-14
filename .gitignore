@@ -6,7 +6,7 @@ Homestead.yaml
 /storage/*
 !/storage/views
 /storage/views/*
-!/*/.gitkeep
+!*.gitkeep
 /public/doc
 .phpstorm.meta.php
 _ide_helper.php
