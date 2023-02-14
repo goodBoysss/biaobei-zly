@@ -10,3 +10,4 @@ _ide_helper.php
 .env.dev
 .env.production
 .env.pre
+!.gitkeep
