@@ -47,6 +47,11 @@ class RedirectController extends BaseController
             'visit_time' => date("Y-m-d H:i:s"),
         ));
 
+        return view('hello',array(
+            'name'=>11
+        ));
+        die();
+
         if (!empty($redirectInfo)) {
             //获取浏览器类型：0-其他；1-微信应用内置浏览器；2-QQ应用内置浏览器
             $browserType = app("logic_redirect")->getBrowserType($userAgent);
