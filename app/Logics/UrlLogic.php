@@ -68,16 +68,17 @@ class UrlLogic
         //短连接地址
         $shortUrl = "{$domain}/{$shortKey}";
 
-        //删除锁
-        app('redis')->del($clockKey);
-
         //更新域名最近一个短链key
         app("repo_domain_recent_key")->update($recentKeyId, array(
             'short_key' => $shortKey,
         ));
 
+        //删除锁
+        app('redis')->del($clockKey);
+
         //插入重定向跳转链接
         app("repo_redirect_url")->insert(array(
+            'app_id' => $appId,
             'domain_md5' => $domainMd5,
             'short_key' => $shortKey,
             'origin_url' => $originUrl,

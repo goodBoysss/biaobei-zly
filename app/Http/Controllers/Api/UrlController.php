@@ -39,6 +39,7 @@ class UrlController extends BaseController
             "url" => 'required|url',
             "domain" => 'string',
             "app_alias" => 'string',
+            "is_show_cover" => 'integer',//是否展示封面图（微信、QQ）：1-展示；0-不展示；
         ));
 
         $appId = app("context")->get(ContextEnum::APP_ID, 0);

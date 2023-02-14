@@ -5,7 +5,9 @@ namespace App\Providers;
 use App\Models\App;
 use App\Models\Domain;
 use App\Models\DomainRecentKey;
+use App\Models\RedirectCover;
 use App\Models\RedirectUrl;
+use App\Models\RedirectVisitLog;
 use Illuminate\Support\ServiceProvider;
 
 class ModelServiceProvider extends ServiceProvider
@@ -43,5 +45,9 @@ class ModelServiceProvider extends ServiceProvider
     {
         //重定向url
         $this->app->singleton('model_redirect_url', RedirectUrl::class);
+        //跳转封面图
+        $this->app->singleton('model_redirect_cover', RedirectCover::class);
+        //跳转访问日志
+        $this->app->singleton('model_redirect_visit_log', RedirectVisitLog::class);
     }
 }

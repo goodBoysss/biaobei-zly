@@ -47,10 +47,9 @@ class RedirectController extends BaseController
             'visit_time' => date("Y-m-d H:i:s"),
         ));
 
-        return view('Redirect.Cover',array(
-            'name'=>11
+        return view('Redirect.Cover', array(
+            'info' => $redirectInfo
         ));
-        die();
 
         if (!empty($redirectInfo)) {
             //获取浏览器类型：0-其他；1-微信应用内置浏览器；2-QQ应用内置浏览器
@@ -58,11 +57,9 @@ class RedirectController extends BaseController
             if ($browserType == 0) {
                 return redirect($redirectInfo['origin_url']);
             } else {
-                //获取跳转页面封面html
-                $coverHtml = app("logic_redirect")->getCoverHtml($redirectInfo);
-                return (new \Symfony\Component\HttpFoundation\Response($coverHtml, 200,array(
-                    'Content-Type'=>'text/html'
-                )));
+                return view('Redirect.Cover', array(
+                    'info' => $redirectInfo
+                ));
             }
 
         } else {
