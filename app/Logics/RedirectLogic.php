@@ -39,7 +39,7 @@ class RedirectLogic
         //先从缓存获取
         $clockKey = sprintf(RedisKeyEnum::REDIRECT_URLS, $domainMd5, $shortKey);
         $redirectInfo = app("redis")->get($clockKey);
-        if (!empty($redirectInfo) && $isUseCache == true) {
+        if (!empty($redirectInfo) && $isUseCache === true) {
             //存在缓存中
             $redirectInfo = json_decode($redirectInfo, true);
         } else {
