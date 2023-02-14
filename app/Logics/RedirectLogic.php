@@ -27,18 +27,19 @@ class RedirectLogic
      * @desc: 获取重定向url
      * @param $domain
      * @param $shortKey
+     * @param bool $isUseCache 是否使用缓存：true-优先读缓存数据；false-不读缓存数据
      * @return mixed|string
      * User: zhanglinxiao<zhanglinxiao@tianmtech.cn>
      * DateTime: 2023/02/08 21:20
      */
-    public function getRedirectInfo($domain, $shortKey)
+    public function getRedirectInfo($domain, $shortKey, bool $isUseCache = true)
     {
         $domainMd5 = md5($domain);
 
         //先从缓存获取
         $clockKey = sprintf(RedisKeyEnum::REDIRECT_URLS, $domainMd5, $shortKey);
         $redirectInfo = app("redis")->get($clockKey);
-        if (!empty($redirectInfo)) {
+        if (!empty($redirectInfo) && $isUseCache == true) {
             //存在缓存中
             $redirectInfo = json_decode($redirectInfo, true);
         } else {
@@ -49,15 +50,23 @@ class RedirectLogic
                 'id' => 'desc'
             ));
 
-            //todo::
             $redirectInfo = array(
                 'origin_url' => $redirectUrlInfo['origin_url'],
                 'is_show_cover' => $redirectUrlInfo['is_show_cover'],
-                'cover_url' => "https://img04.sogoucdn.com/v2/thumb/retype_exclude_gif/ext/auto/q/80/crop/xy/ai/t/0/w/562/h/752?appid=122&url=https://img01.sogoucdn.com/app/a/100520020/774210cf558ba3ccfba38873ea713d33",
+                'cover_image_url' => "",
             );
 
+            //展示跳转封面
+            if ($redirectInfo['is_show_cover'] == 1) {
+                $redirectCoverInfo = app("repo_redirect_cover")->first(array(
+                    array('domain_md5', $domainMd5),
+                    array('short_key', $shortKey),
+                ), array('cover_image_url'));
+                if (!empty($redirectCoverInfo['cover_image_url'])) {
+                    $redirectInfo['cover_image_url'] = $redirectCoverInfo['cover_image_url'];
+                }
+            }
         }
-
 
         return $redirectInfo;
     }

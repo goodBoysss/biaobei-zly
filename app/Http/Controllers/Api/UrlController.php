@@ -34,13 +34,20 @@ class UrlController extends BaseController
      */
     public function shortenUrl(Request $request)
     {
-
         $params = $this->validate($request, array(
             "url" => 'required|url',
             "domain" => 'string',
             "app_alias" => 'string',
             "is_show_cover" => 'integer',//是否展示封面图（微信、QQ）：1-展示；0-不展示；
+            "cover_image_url" => 'url',//封面图url不能为空
         ));
+
+        if (isset($params['is_show_cover'])) {
+            if ($params['is_show_cover'] == 1 && empty($params['cover_image_url'])) {
+                throw new BasicException(10001, '封面图地址不能为空');
+            }
+        }
+
 
         $appId = app("context")->get(ContextEnum::APP_ID, 0);
 

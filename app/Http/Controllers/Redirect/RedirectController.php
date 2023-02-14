@@ -36,6 +36,7 @@ class RedirectController extends BaseController
     {
         $domain = $request->getHttpHost();
         $userAgent = $request->userAgent();
+        $ip = $request->ip();
         $redirectInfo = app("logic_redirect")->getRedirectInfo($domain, $shortKey);
 
         //添加访问记录到redis缓存
@@ -43,7 +44,7 @@ class RedirectController extends BaseController
             'domain' => $domain,
             'short_key' => $shortKey,
             'user_agent' => $userAgent,
-            'ip' => $request->ip(),
+            'ip' => $ip,
             'visit_time' => date("Y-m-d H:i:s"),
         ));
 

@@ -82,7 +82,21 @@ class UrlLogic
             'domain_md5' => $domainMd5,
             'short_key' => $shortKey,
             'origin_url' => $originUrl,
+            'is_show_cover' => $params['is_show_cover'] ?? 0,
         ));
+
+        //是否展示封面图（微信、QQ）：1-展示；0-不展示；
+        if (isset($params['is_show_cover'])) {
+            if ($params['is_show_cover'] == 1 && !empty($params['cover_image_url'])) {
+                //插入跳转封面信息
+                app("repo_redirect_cover")->insert(array(
+                    'app_id' => $appId,
+                    'domain_md5' => $domainMd5,
+                    'short_key' => $shortKey,
+                    'cover_image_url' => $params['cover_image_url'],
+                ));
+            }
+        }
 
         return array(
             'domain' => $domain,
