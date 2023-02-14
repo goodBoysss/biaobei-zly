@@ -1,7 +1,7 @@
 <?php
 return [
     'paths' => [
-        resource_path('views'),
+        base_path('app/Views'),
     ],
     'compiled' => realpath(storage_path('views')),
 ];

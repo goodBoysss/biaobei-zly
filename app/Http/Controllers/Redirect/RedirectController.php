@@ -47,7 +47,7 @@ class RedirectController extends BaseController
             'visit_time' => date("Y-m-d H:i:s"),
         ));
 
-        return view('hello',array(
+        return view('Redirect.Cover',array(
             'name'=>11
         ));
         die();
