@@ -3,7 +3,11 @@
 Homestead.json
 Homestead.yaml
 .env
-/storage
+/storage/*
+!/storage/.gitkeep
+!/storage/views
+/storage/views/*
+!/storage/views/.gitkeep
 /public/doc
 .phpstorm.meta.php
 _ide_helper.php
