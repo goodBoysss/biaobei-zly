@@ -152,7 +152,7 @@ class RedirectLogic
     public function saveRedirectInfoToCache($data)
     {
         //访问次数，大于等于这个次数就加入缓存
-        $maxNum = 1;
+        $maxNum = 3;
         //缓存过期时间，单位秒
         $expireSeconds = 3 * 60;
         $list = array();
