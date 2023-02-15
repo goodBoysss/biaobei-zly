@@ -8,9 +8,9 @@
  * ==============================================
  * @desc: 同步跳转访问记录（从redis同步到数据库）
  * @author: zhangkang<zhangkang@tianmtech.cn>
- * @date: 2022/11/28
+ * @date: 2023/02/15
  * @version: v1.0.0
- * @since: 2022/11/28 13:23
+ * @since: 2023/02/15 13:23
  */
 
 namespace App\Console\Commands\Sync;
