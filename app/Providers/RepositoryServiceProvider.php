@@ -7,7 +7,7 @@ use App\Repositories\DomainRecentKeyRepository;
 use App\Repositories\DomainRepository;
 use App\Repositories\RedirectCoverRepository;
 use App\Repositories\RedirectUrlRepository;
-use App\Repositories\RedirectVisitLogRepository;
+use App\Repositories\RedirectVisitRecordRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -48,6 +48,6 @@ class RepositoryServiceProvider extends ServiceProvider
         //跳转封面图
         $this->app->singleton('repo_redirect_cover', RedirectCoverRepository::class);
         //跳转访问日志
-        $this->app->singleton('repo_redirect_visit_log', RedirectVisitLogRepository::class);
+        $this->app->singleton('repo_redirect_visit_record', RedirectVisitRecordRepository::class);
     }
 }

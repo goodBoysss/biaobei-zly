@@ -1,23 +1,23 @@
 <?php
 /**
- * RedirectVisitLog.php
+ * RedirectVisitLogRepository.php
  * ==============================================
  * Copy right 2015-2022  by https://www.tianmtech.com/
  * ----------------------------------------------
  * This is not a free software, without any authorization is not allowed to use and spread.
  * ==============================================
- * @desc:跳转访问日志
- * @author: zhanglinxiao <zhanglinxiao@tianmtech.cn>
+ * @desc : 跳转访问日志
+ * @author: zhanglinxiao<zhanglinxiao@tianmtech.cn>
  * @date: 2023/2/8
- * @version: v1.0.1
- * @since: 2023/2/8 16:53
+ * @version: v1.0.0
+ * @since: 2023/2/8 09:11
  */
 
-namespace App\Models;
+namespace App\Repositories;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Repositories\BaseRepository;
 
-class RedirectVisitLog extends Model
+class RedirectVisitRecordRepository extends BaseRepository
 {
-    protected $table = 'ln_redirect_visit_log';     //数据库内完整表名
+
 }

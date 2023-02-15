@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\Sync\SyncVisitRecordCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 
@@ -13,6 +14,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        //同步跳转访问记录（从redis同步到数据库）
+        SyncVisitRecordCommand::class,
     ];
 
     /**
@@ -23,6 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-
+        //同步跳转访问记录（从redis同步到数据库）
+        $schedule->command('sync:visit:record')->everyTenMinutes();
     }
 }

@@ -37,8 +37,8 @@ class RedirectLogic
         $domainMd5 = md5($domain);
 
         //先从缓存获取
-        $clockKey = sprintf(RedisKeyEnum::REDIRECT_URLS, $domainMd5, $shortKey);
-        $redirectInfo = app("redis")->get($clockKey);
+        $redisKey = sprintf(RedisKeyEnum::REDIRECT_URLS, $domainMd5, $shortKey);
+        $redirectInfo = app("redis")->get($redisKey);
         if (!empty($redirectInfo) && $isUseCache === true) {
             //存在缓存中
             $redirectInfo = json_decode($redirectInfo, true);
@@ -46,11 +46,16 @@ class RedirectLogic
             $redirectUrlInfo = app("repo_redirect_url")->first(array(
                 'domain_md5' => $domainMd5,
                 'short_key' => $shortKey,
-            ), array('origin_url', 'is_show_cover'), array(
+            ), array('app_id', 'origin_url', 'is_show_cover'), array(
                 'id' => 'desc'
             ));
 
+            if (empty($redirectUrlInfo)) {
+                throw new BasicException(10008, '链接已失效');
+            }
+
             $redirectInfo = array(
+                'app_id' => $redirectUrlInfo['app_id'],
                 'origin_url' => $redirectUrlInfo['origin_url'],
                 'is_show_cover' => $redirectUrlInfo['is_show_cover'],
                 'cover_image_url' => "",
@@ -122,5 +127,102 @@ class RedirectLogic
 //        return $coverHtml;
 //    }
 
+    /**
+     * @desc: 同步跳转访问记录
+     * @param $data
+     * User: zhanglinxiao<zhanglinxiao@tianmtech.cn>
+     * DateTime: 2023/02/14 19:25
+     */
+    public function syncVisitRecord($data)
+    {
+        //将访问次数多的链接写入redis
+        $this->saveRedirectInfoToCache($data);
+        //保存访问记录
+        $this->saveVisitRecord($data);
+    }
+
+
+    /**
+     * @desc: 将访问次数多的链接写入redis
+     * @param $data
+     * @throws BasicException
+     * User: zhanglinxiao<zhanglinxiao@tianmtech.cn>
+     * DateTime: 2023/02/15 13:36
+     */
+    public function saveRedirectInfoToCache($data)
+    {
+        //访问次数，大于等于这个次数就加入缓存
+        $maxNum = 1;
+        //缓存过期时间，单位秒
+        $expireSeconds = 3 * 60;
+        $list = array();
+        foreach ($data as $v) {
+            if (!empty($v['app_id']) && !empty($v['domain']) && !empty($v['short_key']) && !empty($v['visit_time'])) {
+                $domain = $v['domain'];
+                $domainMd5 = md5($domain);
+                $shortKey = $v['short_key'];
+                $visitTime = $v['visit_time'];
+                //一小时内点击的
+                if (strtotime($visitTime) > time() - 60 * 60) {
+                    $uuid = md5("{$domainMd5}_{$shortKey}");
+                    if (isset($list[$uuid])) {
+                        $list[$uuid]['visit_num']++;
+                    } else {
+                        $list[$uuid] = array(
+                            'domain' => $domain,
+                            'domain_md5' => $domainMd5,
+                            'short_key' => $shortKey,
+                            'visit_num' => 1,
+                        );
+                    }
+                }
+            }
+        }
+
+        foreach ($list as $v) {
+
+            if ($v['visit_num'] <= $maxNum) {
+                $domain = $v['domain'];
+                $domainMd5 = $v['domain_md5'];
+                $shortKey = $v['short_key'];
+
+                $redisKey = sprintf(RedisKeyEnum::REDIRECT_URLS, $domainMd5, $shortKey);
+                $redirectInfo = app("redis")->get($redisKey);
+                if (empty($redirectInfo)) {
+                    $redirectInfo = $this->getRedirectInfo($domain, $shortKey, false);
+                    app("redis")->setex($redisKey, $expireSeconds, json_encode($redirectInfo));
+                } else {
+                    app("redis")->expire($redisKey, $expireSeconds);
+                }
+            }
+        }
+    }
+
+    /**
+     * @desc: 保存访问记录
+     * @param $data
+     * User: zhanglinxiao<zhanglinxiao@tianmtech.cn>
+     * DateTime: 2023/02/15 12:00
+     */
+    public function saveVisitRecord($data)
+    {
+        $insertData = array();
+        foreach ($data as $v) {
+            if (!empty($v['app_id']) && !empty($v['domain']) && !empty($v['short_key']) && !empty($v['visit_time'])) {
+                $insertData[] = array(
+                    'app_id' => $v['app_id'],
+                    'domain_md5' => md5($v['domain']),
+                    'short_key' => $v['short_key'],
+                    'visit_time' => $v['visit_time'],
+                    'user_agent' => $v['user_agent'] ?? '',
+                    'ip' => $v['ip'] ?? '',
+                );
+            }
+        }
+
+        if (!empty($insertData)) {
+            app('repo_redirect_visit_record')->insertRows($insertData);
+        }
+    }
 
 }

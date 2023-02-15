@@ -41,6 +41,7 @@ class RedirectController extends BaseController
 
         //添加访问记录到redis缓存
         app("logic_redirect")->addRedirectVisitRecordToCache(array(
+            'app_id' => $redirectInfo['app_id'] ?? 0,
             'domain' => $domain,
             'short_key' => $shortKey,
             'user_agent' => $userAgent,

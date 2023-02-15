@@ -7,7 +7,7 @@ use App\Models\Domain;
 use App\Models\DomainRecentKey;
 use App\Models\RedirectCover;
 use App\Models\RedirectUrl;
-use App\Models\RedirectVisitLog;
+use App\Models\RedirectVisitRecord;
 use Illuminate\Support\ServiceProvider;
 
 class ModelServiceProvider extends ServiceProvider
@@ -48,6 +48,6 @@ class ModelServiceProvider extends ServiceProvider
         //跳转封面图
         $this->app->singleton('model_redirect_cover', RedirectCover::class);
         //跳转访问日志
-        $this->app->singleton('model_redirect_visit_log', RedirectVisitLog::class);
+        $this->app->singleton('model_redirect_visit_record', RedirectVisitRecord::class);
     }
 }
