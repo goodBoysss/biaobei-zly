@@ -44,7 +44,6 @@ class SyncVisitRecordCommand extends Command
                 $total += count($data);
             } while (count($data) == $limit && $total < 100000);
         } catch (\Throwable $e) {
-
             $this->error($e->getMessage());
         }
 
