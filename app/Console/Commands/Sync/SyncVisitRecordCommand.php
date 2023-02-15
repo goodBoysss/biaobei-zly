@@ -7,7 +7,7 @@
  * This is not a free software, without any authorization is not allowed to use and spread.
  * ==============================================
  * @desc: 同步跳转访问记录（从redis同步到数据库）
- * @author: zhangkang<zhangkang@tianmtech.cn>
+ * @author: zhanglinxiao<zhanglinxiao@tianmtech.cn>
  * @date: 2023/02/15
  * @version: v1.0.0
  * @since: 2023/02/15 13:23
