@@ -55,7 +55,7 @@ class UrlLogic
         }
 
         //获取上一个短连接key（不存在则生成）
-        $recentKeyInfo = $this->getRecentKeyInfo($domainMd5);
+        $recentKeyInfo = $this->getRecentKeyInfo($appId, $domainMd5);
 
         //域名最近一个短链keyID
         $recentKeyId = $recentKeyInfo['recent_key_id'];
@@ -169,7 +169,7 @@ class UrlLogic
      * User: zhanglinxiao<zhanglinxiao@tianmtech.cn>
      * DateTime: 2023/02/08 18:48
      */
-    private function getRecentKeyInfo($domainMd5)
+    private function getRecentKeyInfo($appId, $domainMd5)
     {
         $recentShortKey = "";
 
@@ -193,6 +193,7 @@ class UrlLogic
 
         if (empty($recentKeyId)) {
             $recentKeyId = app("repo_domain_recent_key")->insert(array(
+                'app_id' => $appId,
                 'domain_md5' => $domainMd5,
                 'short_key' => $recentShortKey,
             ));
