@@ -181,7 +181,7 @@ class RedirectLogic
 
         foreach ($list as $v) {
 
-            if ($v['visit_num'] <= $maxNum) {
+            if ($v['visit_num'] >= $maxNum) {
                 $domain = $v['domain'];
                 $domainMd5 = $v['domain_md5'];
                 $shortKey = $v['short_key'];
