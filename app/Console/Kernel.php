@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\Domain\AddDomainCommand;
 use App\Console\Commands\Sync\SyncVisitRecordCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
@@ -16,6 +17,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         //同步跳转访问记录（从redis同步到数据库）
         SyncVisitRecordCommand::class,
+        //添加域名
+        AddDomainCommand::class
     ];
 
     /**

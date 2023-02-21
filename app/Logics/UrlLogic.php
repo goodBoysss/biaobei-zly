@@ -105,14 +105,6 @@ class UrlLogic
             'short_key' => $shortKey,
             'short_url' => $shortUrl,
         );
-
-//        $urlInfo = parse_url($url);
-//        if (empty($urlInfo['host'])) {
-//            throw new BasicException(10001, '链接域名不能为空');
-//        }
-//        $domain = $urlInfo['host'];
-
-
     }
 
     /**
