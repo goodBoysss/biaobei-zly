@@ -19,7 +19,7 @@
 </div>
 
 <div style="margin-top:22vw;">
-    <div style="position: fixed ; top: 0;height:100%;background: rgba(0,0,0,40%);margin-top:22vw;z-index: 1000"></div>
+    <div style="position: fixed ; top: 0;height:100%;background: rgba(115,115,115,60%);margin-top:22vw;z-index: 1000"></div>
     <img style='filter: grayscale(0%)' src='{{$info['cover_image_url']}}' width='100%'/>
 </div>
 </body>
