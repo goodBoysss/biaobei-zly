@@ -35,6 +35,8 @@ class RedirectController extends BaseController
     public function redirectUrl(Request $request, $shortKey)
     {
         $domain = $request->getHttpHost();
+
+//        $domain = "shorturl-api-test.tianmcloud.top";
         $userAgent = $request->userAgent();
         $ip = $request->ip();
         $redirectInfo = app("logic_redirect")->getRedirectInfo($domain, $shortKey);
@@ -48,6 +50,12 @@ class RedirectController extends BaseController
             'ip' => $ip,
             'visit_time' => date("Y-m-d H:i:s"),
         ));
+
+
+//        $redirectInfo['tip_image_base64'] = "data:image/jpg;base64," . base64_encode(file_get_contents("https://tm-shorturl-prod.obs.cn-east-3.myhuaweicloud.com/cover/open/tip.jpg"));
+//        return view('Redirect.Cover', array(
+//            'info' => $redirectInfo
+//        ));
 
         if (!empty($redirectInfo)) {
             //获取浏览器类型：0-其他；1-微信应用内置浏览器；2-QQ应用内置浏览器
