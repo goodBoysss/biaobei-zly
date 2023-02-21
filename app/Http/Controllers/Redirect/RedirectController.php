@@ -35,9 +35,14 @@ class RedirectController extends BaseController
     public function redirectUrl(Request $request, $shortKey)
     {
         $domain = $request->getHttpHost();
+        $domain = "shorturl-api-test.tianmcloud.top";
         $userAgent = $request->userAgent();
         $ip = $request->ip();
         $redirectInfo = app("logic_redirect")->getRedirectInfo($domain, $shortKey);
+
+        return view('Redirect.Cover', array(
+            'info' => $redirectInfo
+        ));
 
         //添加访问记录到redis缓存
         app("logic_redirect")->addRedirectVisitRecordToCache(array(
