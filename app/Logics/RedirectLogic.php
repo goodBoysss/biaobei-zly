@@ -100,7 +100,8 @@ class RedirectLogic
 
         if (strpos($userAgent, 'MicroMessenger') !== false) {
             $browserType = 1;
-        } else if (strpos($userAgent, 'MQQBrowser') !== false) {
+//        } else if (strpos($userAgent, 'MQQBrowser') !== false) {
+        } else if (preg_match('/QQ\/[0-9]/i', $userAgent)) {
             $browserType = 2;
         }
 
