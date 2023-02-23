@@ -143,11 +143,11 @@ class UrlLogic
         }
 
         if (empty($domainInfo)) {
-            throw new BasicException(10008, '不存在域名');
+            throw new BasicException(10008, '短链生成失败：无可用短链域名');
         }
 
         if ($domainInfo['is_published'] == 0) {
-            throw new BasicException(10008, '域名已被关闭');
+            throw new BasicException(10008, '短链生成失败：域名已被关闭');
         }
 
         return $domainInfo;
