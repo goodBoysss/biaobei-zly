@@ -35,10 +35,11 @@ class AddDomainCommand extends Command
         //开始ID
         $appId = $this->option('app_id');
         $domain = $this->option('domain');
-        if (!empty($appId) && !empty($domain)) {
+        if (!empty($domain)) {
+            $appId = !empty($appId) ? $appId : 0;
             $this->addDomain($appId, $domain);
         } else {
-            $this->error("应用ID和域名都不能为空");
+            $this->error("域名不能为空");
         }
 
         $this->info("执行结束:【" . date("Y-m-d H:i:s") . "】");
@@ -55,15 +56,18 @@ class AddDomainCommand extends Command
             array('id', $appId)
         ), array('id', 'name'));
 
-        if (empty($appInfo)) {
-            throw new BasicException(10008, '应用不存在');
-        }
+//        if (empty($appInfo)) {
+//            throw new BasicException(10008, '应用不存在');
+//        }
 
         $urlInfo = parse_url($domain);
         if (count($urlInfo) == 1 && !empty($urlInfo['path']) && $urlInfo['path'] == $domain) {
             //例如：www.tianmiao.com
         } elseif (count($urlInfo) == 2 && !empty($urlInfo['scheme']) && !empty($urlInfo['host'])) {
             //例如：http(s)://www.tianmiao.com，去除http(s)
+            $domain = $urlInfo['host'];
+        }  elseif (count($urlInfo) == 3 && !empty($urlInfo['scheme']) && !empty($urlInfo['host']) && !empty($urlInfo['path'])) {
+            //例如：http(s)://www.tianmiao.com/，去除http(s)和后面斜杠
             $domain = $urlInfo['host'];
         } else {
             throw new BasicException(10008, '域名不合法');
@@ -86,7 +90,7 @@ class AddDomainCommand extends Command
             'is_published' => 1,
         ));
 
-        $this->info("应用：[{$appInfo['name']}]，域名：[{$domain}]创建成功");
+        $this->info("应用：[{$appId}]，域名：[{$domain}]创建成功");
     }
 
 }
