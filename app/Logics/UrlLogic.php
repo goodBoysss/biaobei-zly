@@ -38,73 +38,95 @@ class UrlLogic
             throw new BasicException(10001, '链接不能为空');
         }
 
-        $originUrl = $params['url'];
-
-        //域名信息
-        $domainInfo = $this->getDomainInfo($appId, $params);
-        //域名
-        $domain = $domainInfo['domain'];
-        //域名md5
-        $domainMd5 = $domainInfo['domain_md5'];
-
-        //对生成短链的域名加锁
-        $clockKey = sprintf(RedisKeyEnum::SHORTEN_URL, $domainMd5);
-        $clockResult = app('redis')->set($clockKey, 1, 'ex', 30, 'nx');
-        if (!$clockResult) {
-            throw new BasicException(10008, '域名生成失败，请稍后再试');
+        $coverImageUrls = array();
+        if (isset($params['is_show_cover']) && $params['is_show_cover'] == 1 && !empty($params['cover_image_url'])) {
+            $coverImageUrls = array($params['cover_image_url']);
         }
 
-        //获取上一个短连接key（不存在则生成）
-        $recentKeyInfo = $this->getRecentKeyInfo($appId, $domainMd5);
-
-        //域名最近一个短链keyID
-        $recentKeyId = $recentKeyInfo['recent_key_id'];
-        //域名最近一个短链key
-        $recentShortKey = $recentKeyInfo['recent_short_key'];
-
-        //根据上一个短链key生成下一个短链key
-        $shortKeyObj = new ShortKey();
-        $shortKey = $shortKeyObj->next($recentShortKey);
-        //短连接地址
-        $shortUrl = "{$domain}/{$shortKey}";
-
-        //更新域名最近一个短链key
-        app("repo_domain_recent_key")->update($recentKeyId, array(
-            'short_key' => $shortKey,
-        ));
-
-        //删除锁
-        app('redis')->del($clockKey);
-
-        //插入重定向跳转链接
-        app("repo_redirect_url")->insert(array(
-            'app_id' => $appId,
-            'domain_md5' => $domainMd5,
-            'short_key' => $shortKey,
-            'origin_url' => $originUrl,
-            'is_show_cover' => $params['is_show_cover'] ?? 0,
-        ));
-
-        //是否展示封面图（微信、QQ）：1-展示；0-不展示；
-        if (isset($params['is_show_cover'])) {
-            if ($params['is_show_cover'] == 1 && !empty($params['cover_image_url'])) {
-                //插入跳转封面信息
-                app("repo_redirect_cover")->insert(array(
-                    'app_id' => $appId,
-                    'domain_md5' => $domainMd5,
-                    'short_key' => $shortKey,
-                    'cover_image_url' => $params['cover_image_url'],
-                ));
-            }
-        }
-
-        return array(
-            'domain' => $domain,
-            'domain_md5' => $domainMd5,
-            'origin_url' => $originUrl,
-            'short_key' => $shortKey,
-            'short_url' => $shortUrl,
+        $batchParams = array(
+            "urls" => array($params['url']),
+            "domain" => $params['domain'] ?? "",
+            "cover_image_urls" => $coverImageUrls,
         );
+
+        $result = $this->batchShortenUrl($appId, $batchParams);
+        if (!empty($result["short_url_data"][0])) {
+            return $result["short_url_data"][0];
+        } else {
+            throw new BasicException(10008, '短链生成失败');
+        }
+
+//        if (empty($params['url'])) {
+//            throw new BasicException(10001, '链接不能为空');
+//        }
+//
+//        $originUrl = $params['url'];
+//
+//        //域名信息
+//        $domainInfo = $this->getDomainInfo($appId, $params);
+//        //域名
+//        $domain = $domainInfo['domain'];
+//        //域名md5
+//        $domainMd5 = $domainInfo['domain_md5'];
+//
+//        //对生成短链的域名加锁
+//        $clockKey = sprintf(RedisKeyEnum::SHORTEN_URL, $domainMd5);
+//        $clockResult = app('redis')->set($clockKey, 1, 'ex', 30, 'nx');
+//        if (!$clockResult) {
+//            throw new BasicException(10008, '域名生成失败，请稍后再试');
+//        }
+//
+//        //获取上一个短连接key（不存在则生成）
+//        $recentKeyInfo = $this->getRecentKeyInfo($appId, $domainMd5);
+//
+//        //域名最近一个短链keyID
+//        $recentKeyId = $recentKeyInfo['recent_key_id'];
+//        //域名最近一个短链key
+//        $recentShortKey = $recentKeyInfo['recent_short_key'];
+//
+//        //根据上一个短链key生成下一个短链key
+//        $shortKeyObj = new ShortKey();
+//        $shortKey = $shortKeyObj->next($recentShortKey);
+//        //短连接地址
+//        $shortUrl = "{$domain}/{$shortKey}";
+//
+//        //更新域名最近一个短链key
+//        app("repo_domain_recent_key")->update($recentKeyId, array(
+//            'short_key' => $shortKey,
+//        ));
+//
+//        //删除锁
+//        app('redis')->del($clockKey);
+//
+//        //插入重定向跳转链接
+//        app("repo_redirect_url")->insert(array(
+//            'app_id' => $appId,
+//            'domain_md5' => $domainMd5,
+//            'short_key' => $shortKey,
+//            'origin_url' => $originUrl,
+//            'is_show_cover' => $params['is_show_cover'] ?? 0,
+//        ));
+//
+//        //是否展示封面图（微信、QQ）：1-展示；0-不展示；
+//        if (isset($params['is_show_cover'])) {
+//            if ($params['is_show_cover'] == 1 && !empty($params['cover_image_url'])) {
+//                //插入跳转封面信息
+//                app("repo_redirect_cover")->insert(array(
+//                    'app_id' => $appId,
+//                    'domain_md5' => $domainMd5,
+//                    'short_key' => $shortKey,
+//                    'cover_image_url' => $params['cover_image_url'],
+//                ));
+//            }
+//        }
+//
+//        return array(
+//            'domain' => $domain,
+//            'domain_md5' => $domainMd5,
+//            'origin_url' => $originUrl,
+//            'short_key' => $shortKey,
+//            'short_url' => $shortUrl,
+//        );
     }
 
     /**
@@ -202,6 +224,7 @@ class UrlLogic
                 'origin_url' => $originUrl,
                 'short_key' => $shortKey,
                 'short_url' => $shortUrl,
+                'cover_image_url' => $coverImageUrl,
             );
 
         }
