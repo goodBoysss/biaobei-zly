@@ -108,6 +108,119 @@ class UrlLogic
     }
 
     /**
+     * @desc: 生成多个短链接
+     * @param $appId
+     * @param $params
+     * @return array
+     * @throws BasicException
+     * User: zhanglinxiao<zhanglinxiao@tianmtech.cn>
+     * DateTime: 2023/02/08 20:40
+     */
+    public function batchShortenUrl($appId, $params)
+    {
+        if (empty($params['urls'])) {
+            throw new BasicException(10001, '链接不能为空');
+        }
+
+        if (count($params['urls']) > 500) {
+            throw new BasicException(10001, '单次批量生成链接不能超过500个');
+        }
+
+        $urlCount = count($params['urls']);
+
+        //域名信息
+        $domainInfo = $this->getDomainInfo($appId, $params);
+        //域名
+        $domain = $domainInfo['domain'];
+        //域名md5
+        $domainMd5 = $domainInfo['domain_md5'];
+
+        //对生成短链的域名加锁
+        $clockKey = sprintf(RedisKeyEnum::SHORTEN_URL, $domainMd5);
+        $clockResult = app('redis')->set($clockKey, 1, 'ex', 30, 'nx');
+        if (!$clockResult) {
+            throw new BasicException(10008, '域名生成失败，请稍后再试');
+        }
+
+        //获取上一个短连接key（不存在则生成）
+        $recentKeyInfo = $this->getRecentKeyInfo($appId, $domainMd5);
+
+        //域名最近一个短链keyID
+        $recentKeyId = $recentKeyInfo['recent_key_id'];
+        //域名最近一个短链key
+        $recentShortKey = $recentKeyInfo['recent_short_key'];
+
+        //根据上一个短链key生成下一个短链key
+        $shortKeyObj = new ShortKey();
+        $shortKeys = $shortKeyObj->batch($recentShortKey, count($params['urls']));
+        //最后一个短链key
+        $endShortKey = end($shortKeys);
+        //更新域名最近一个短链key
+        app("repo_domain_recent_key")->update($recentKeyId, array(
+            'short_key' => $endShortKey,
+        ));
+
+        //删除锁
+        app('redis')->del($clockKey);
+
+        //插入跳转信息
+        $insertRedirectUrlData = array();
+        //插入跳转封面图（微信、QQ）信息；
+        $insertRedirectCoverData = array();
+        //返回结果
+        $returnShortUrlData = array();
+        for ($i = 0; $i < $urlCount; $i++) {
+            $shortKey = $shortKeys[$i];
+            $originUrl = $params['urls'][$i];
+            $isShowCover = !empty($params['cover_image_urls'][$i]) ? 1 : 0;
+            $coverImageUrl = !empty($params['cover_image_urls'][$i]) ? $params['cover_image_urls'][$i] : "";
+            //短连接地址
+            $shortUrl = "{$domain}/{$shortKey}";
+
+            //跳转信息
+            $insertRedirectUrlData[] = array(
+                'app_id' => $appId,
+                'domain_md5' => $domainMd5,
+                'short_key' => $shortKey,
+                'origin_url' => $originUrl,
+                'is_show_cover' => $isShowCover,
+            );
+
+            //跳转封面图（微信、QQ）信息
+            if ($isShowCover == 1) {
+                $insertRedirectCoverData[] = array(
+                    'app_id' => $appId,
+                    'domain_md5' => $domainMd5,
+                    'short_key' => $shortKey,
+                    'cover_image_url' => $coverImageUrl,
+                );
+            }
+
+            $returnShortUrlData[] = array(
+                'domain' => $domain,
+                'domain_md5' => $domainMd5,
+                'origin_url' => $originUrl,
+                'short_key' => $shortKey,
+                'short_url' => $shortUrl,
+            );
+
+        }
+        //批量插入跳转信息
+        if (!empty($insertRedirectUrlData)) {
+            app("repo_redirect_url")->insertRows($insertRedirectUrlData);
+        }
+
+        //批量插入跳转封面图（微信、QQ）信息
+        if (!empty($insertRedirectCoverData)) {
+            app("repo_redirect_cover")->insertRows($insertRedirectCoverData);
+        }
+
+        return array(
+            'short_url_data' => $returnShortUrlData
+        );
+    }
+
+    /**
      * @desc: 获取短链域名
      * @param $appId
      * @param $params

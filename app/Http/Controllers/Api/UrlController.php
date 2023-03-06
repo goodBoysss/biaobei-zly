@@ -60,4 +60,39 @@ class UrlController extends BaseController
         return Response::sendData($result);
     }
 
+    /**
+     * @desc: 生成多个短链接
+     * User: zhanglinxiao<zhanglinxiao@tianmtech.cn>
+     * DateTime: 2023/02/08 15:19
+     * ApiLink:post /api/url/batch/shorten
+     * @param Request $request
+     * @return string
+     * @throws BasicException
+     */
+    public function batchShortenUrl(Request $request)
+    {
+        $params = $this->validate($request, array(
+            "urls" => 'required',
+            "domain" => 'string',
+            "app_alias" => 'string',
+            "cover_image_urls" => '',//封面图url不能为空
+        ));
+        $params["urls"] = json_decode($params["urls"], true);
+        if (!empty($params['cover_image_urls'])) {
+            $params["cover_image_urls"] = json_decode($params["cover_image_urls"], true);
+        } else {
+            $params["cover_image_urls"] = array();
+        }
+
+        $appId = app("context")->get(ContextEnum::APP_ID, 0);
+
+        //公共服务间调用用到
+        if (empty($appId) && !empty($params['app_alias'])) {
+            $appId = app("logic_cache_app")->getAppIdByAlias($params['app_alias']);
+        }
+
+        $result = app("logic_url")->batchShortenUrl($appId, $params);
+        return Response::sendData($result);
+    }
+
 }

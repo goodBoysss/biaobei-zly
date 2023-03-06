@@ -79,4 +79,24 @@ class ShortKey
         return $nextStr;
     }
 
+    /**
+     * @desc: 批量生成接下去几个字符串
+     * @param $currentStr
+     * @param int 生成个数
+     * @return mixed|string
+     * User: zhanglinxiao<zhanglinxiao@tianmtech.cn>
+     * DateTime: 2023/02/08 18:40
+     */
+    public function batch($currentStr, $num = 1)
+    {
+        $nextArr = array();
+
+        for ($i = 0; $i < $num; $i++) {
+            $nextStr = $this->next($currentStr);
+            $nextArr[] = $nextStr;
+            $currentStr = $nextStr;
+        }
+        return $nextArr;
+    }
+
 }

@@ -29,7 +29,7 @@ $router->group(['namespace' => 'Api', 'prefix' => 'api'], function ($router) {
         //生成单个短链接
         $router->post('/shorten', 'UrlController@shortenUrl');
         //批量生成短链接
-        $router->post('/batch/shorten', 'UrlController@batchShorten');
+        $router->post('/batch/shorten', 'UrlController@batchShortenUrl');
     });
 
 });
