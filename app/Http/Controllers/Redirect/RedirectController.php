@@ -61,7 +61,9 @@ class RedirectController extends BaseController
             //获取浏览器类型：0-其他；1-微信应用内置浏览器；2-QQ应用内置浏览器
             $browserType = app("logic_redirect")->getBrowserType($userAgent);
             if ($browserType == 0) {
-                return redirect($redirectInfo['origin_url']);
+                return redirect($redirectInfo['origin_url'], 302, array(
+                    "Cache-Control" => "no-cache"
+                ));
             } else {
                 return view('Redirect.Cover', array(
                     'info' => $redirectInfo
