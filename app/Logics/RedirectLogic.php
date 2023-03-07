@@ -44,8 +44,8 @@ class RedirectLogic
             $redirectInfo = json_decode($redirectInfo, true);
         } else {
             $redirectUrlInfo = app("repo_redirect_url")->first(array(
-                array(DB::raw("BINARY short_key"), $shortKey),
                 array('domain_md5', $domainMd5),
+                array(DB::raw("BINARY short_key"), $shortKey),
             ), array('app_id', 'origin_url', 'is_show_cover'), array(
                 'id' => 'desc'
             ));
@@ -64,7 +64,7 @@ class RedirectLogic
             if ($redirectInfo['is_show_cover'] == 1) {
                 $redirectCoverInfo = app("repo_redirect_cover")->first(array(
                     array('domain_md5', $domainMd5),
-                    array('short_key', $shortKey),
+                    array(DB::raw("BINARY short_key"), $shortKey),
                 ), array('cover_image_url'));
                 if (!empty($redirectCoverInfo['cover_image_url'])) {
                     $redirectInfo['cover_image_url'] = $redirectCoverInfo['cover_image_url'];
