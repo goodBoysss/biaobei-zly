@@ -44,12 +44,11 @@ class RedirectLogic
             $redirectInfo = json_decode($redirectInfo, true);
         } else {
             $redirectUrlInfo = app("repo_redirect_url")->first(array(
-                'domain_md5' => $domainMd5,
-                'short_key' => $shortKey,
+                array(DB::raw("BINARY short_key"), $shortKey),
+                array('domain_md5', $domainMd5),
             ), array('app_id', 'origin_url', 'is_show_cover'), array(
                 'id' => 'desc'
             ));
-
             if (empty($redirectUrlInfo)) {
                 throw new BasicException(10008, '链接已失效');
             }
