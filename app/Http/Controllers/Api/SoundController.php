@@ -32,9 +32,25 @@ class SoundController extends BaseController
 
         $s = new BiaoBeiService();
         $content = $s->generateSound($voiceName, $text);
-        return response()->make($content, 200, array(
+
+        $path = storage_path() . "/sound/" . date("Y-m-d");
+        if (!is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
+
+        $filename = uniqid() . ".mp3";
+        $file = fopen($path . "/" . $filename, "w") or die("无法打开文件！");
+        fwrite($file, $content);
+        fclose($file);
+
+
+        return response()->download($path . "/" . $filename, uniqid() . ".mp3", array(
             "Content-Type" => "audio/mp3"
         ));
+
+//        return response()->make($content, 200, array(
+//            "Content-Type" => "audio/mp3"
+//        ));
     }
 
 
