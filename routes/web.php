@@ -15,27 +15,22 @@
  * @var Laravel\Lumen\Routing\Router $router
  */
 $router->get('/', function () use ($router) {
-    return "短链接服务";
+    return "语音";
 });
 
 /**
  * API
  */
 $router->group(['namespace' => 'Api', 'prefix' => 'api'], function ($router) {
-    /**
-     * 生成链接
-     */
-    $router->group(['prefix' => 'url', 'middleware' => ['app']], function ($router) {
-        //生成单个短链接
-        $router->post('/shorten', 'UrlController@shortenUrl');
-        //批量生成短链接
-        $router->post('/batch/shorten', 'UrlController@batchShortenUrl');
-    });
-
+    //生成声音
+    $router->get('generate/sound', 'SoundController@generateSound');
 });
 
-//重定向链接url
-$router->get('/{shortUrl}', 'Redirect\RedirectController@redirectUrl');
-
-
+/**
+ * WEB
+ */
+$router->group(['namespace' => 'Web', 'prefix' => 'web'], function ($router) {
+    //生成声音
+    $router->get('sound', 'SoundController@generateSound');
+});
 
