@@ -11,7 +11,7 @@
                     alert("生成语音文本内容不能为空")
                 }
 
-                var url = "http://biaobei.zly.lh/api/generate/sound?voice_name=" + voice_name + "&text=" + text;
+                var url = "http://119.45.173.60/api/generate/sound?voice_name=" + voice_name + "&text=" + text;
                 window.open(url, '_blank');
 
             });
