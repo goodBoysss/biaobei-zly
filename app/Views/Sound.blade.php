@@ -24,6 +24,7 @@
     <select name="" id="voice_name" style="width: 100%;margin-bottom: 30px">
         <option value="v00022bbe39adcab88bbbdbb60d35b9e1028f8lznb">张凌云</option>
         <option value="v000246e5f4505635f22d826ebeaf520f8f8aj5u9e">老婆_01</option>
+        <option value="v0002513d66b46eb9a31d62b7e6c1e2aefa58ffeor">天明路_优化</option>
     </select>
     <textarea name="" id="text" cols="30" rows="10" style="width: 100%" placeholder="输入文字"></textarea>
     <button style="margin-top: 30px" id="bt">生成语音</button>
